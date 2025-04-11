@@ -1,21 +1,44 @@
-import { useCallback } from "react"
+import { useDispatch } from "react-redux";
+import { increment, decrement, removeItem } from "../../features/cartSlice";
 
-export default function GoodsItemComponent({ good, increment, decrement, deleteGood }) {
+export default function GoodsItemComponent({ good }) {
+    const dispatch = useDispatch();
 
-    const wrapperFunction = useCallback((event, func) => {
-        event.stopPropagation()
-        func()
-    }, [])
+    const handleIncrement = (e) => {
+        e.stopPropagation();
+        dispatch(increment(good.id));
+    };
+
+    const handleDecrement = (e) => {
+        e.stopPropagation();
+        dispatch(decrement(good.id));
+    };
+
+    const handleDoubleClick = () => {
+        dispatch(removeItem(good.id));
+    };
+
     return (
-        <div className="goods__item" onDoubleClick={deleteGood}>
+        <div className="goods__item" onDoubleClick={handleDoubleClick}>
             <div>
-                {good.name}
-            </div>
-            <div className="goods__price">
-                Price: {good.price}
+                {good.title}
             </div>
             <div>
-                <button className="button" onDoubleClick={(e) => e.stopPropagation()} onClick={(e) => wrapperFunction(e, decrement)}>-</button>{good.count}<button className="button" onDoubleClick={(e) => e.stopPropagation()} onClick={(e) => wrapperFunction(e, increment)}>+</button>
+                <button 
+                    className="button" 
+                    onDoubleClick={(e) => e.stopPropagation()} 
+                    onClick={handleDecrement}
+                >
+                    -
+                </button>
+                {good.count}
+                <button 
+                    className="button" 
+                    onDoubleClick={(e) => e.stopPropagation()} 
+                    onClick={handleIncrement}
+                >
+                    +
+                </button>
             </div>
         </div>
     )

@@ -1,25 +1,33 @@
-import { useState } from "react"
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../features/cartSlice";
 
-export default function AddFormComponent({createGood}) {
-    const [newGood, setNewGood] = useState({
-        name: '',
-        price: ''
-    })
+export default function AddFormComponent() {
+    const [title, setTitle] = useState('');
+    const dispatch = useDispatch();
 
-    const dropGood = () => {
-        setNewGood({
-            name: '',
-            price: ''
-        })
-    }
-    
-    
+    const handleAddItem = () => {
+        if (title.trim()) {
+            dispatch(addItem(title));
+            setTitle('');
+        }
+    };
 
     return (
         <div className="container">
-        <input class="input" type="text" placeholder="Имя продукта" value={newGood.name} onChange={(e) => setNewGood(prev => ({...prev, name: e.target.value}))}/>
-        <input class="input" type="number" placeholder="Цена продукта"value={newGood.price} onChange={(e) => setNewGood(prev => ({...prev, price: e.target.value}))}/>
-        <button class="main-button" onClick={() => createGood(newGood, dropGood)}>Добавить</button>
+            <input 
+                className="input" 
+                type="text" 
+                placeholder="Имя продукта" 
+                value={title} 
+                onChange={(e) => setTitle(e.target.value)}
+            />
+            <button 
+                className="main-button" 
+                onClick={handleAddItem}
+            >
+                Добавить
+            </button>
         </div>
     )
 }
