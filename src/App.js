@@ -17,25 +17,30 @@ function App() {
   }
 
   const increment = (id) => {
+    
     setGoods(prev => prev.map(good =>
       good.id === id ? { ...good, count: good.count + 1 } : good
     ))
   }
 
   const decrement = (id) => {
+    
     setGoods(prev => prev.map(good =>
-      good.id === id ? { ...good, count: Math.max(1, good.count - 1) } : good
-    ))
+      good.id === id ? { ...good, count: Math.max(0, good.count - 1) } : good
+    ).filter(good => good.id !== id || good.count > 0))
   }
 
-  const deleteGood = () => {}
+  const deleteGood = (id) => {
+    
+    setGoods(prev => (prev.filter(good => good.id !== id)))
+  }
 
   return (
 
     <div className="app content">
       <div className="goods">
         <AddFormComponent createGood={createGood} />
-        <GoodsListComponent goods={goods} increment={increment} decrement={decrement} />
+        <GoodsListComponent goods={goods} increment={increment} decrement={decrement} deleteGood={deleteGood}/>
       </div>
     </div>
 
