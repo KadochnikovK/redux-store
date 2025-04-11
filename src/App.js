@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import AddFormComponent from "./components/AddForm/AddFormComponent";
+import GoodsListComponent from "./components/GoodsList/GoodsListComponent";
 
 function App() {
+
+  const [goods, setGoods] = useState([
+    { id: 1, name: 'Велосипед', price: 1000, count: 1 },
+    { id: 2, name: 'Самокат', price: 700, count: 1 },
+    { id: 3, name: 'Ролики', price: 1300, count: 2 },
+    { id: 4, name: 'Сноуборд', price: 1900, count: 4 }
+  ])
+
+  const createGood = (newGood, dropGood) => {
+    setGoods(prev => ([...prev, { id: Date.now(), count: 1, ...newGood }]))
+    dropGood()
+  }
+
+  const increment = (id) => {
+    setGoods(prev => prev.map(good =>
+      good.id === id ? { ...good, count: good.count + 1 } : good
+    ))
+  }
+
+  const decrement = (id) => {
+    setGoods(prev => prev.map(good =>
+      good.id === id ? { ...good, count: Math.max(1, good.count - 1) } : good
+    ))
+  }
+
+  const deleteGood = () => {}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div className="app content">
+      <div className="goods">
+        <AddFormComponent createGood={createGood} />
+        <GoodsListComponent goods={goods} increment={increment} decrement={decrement} />
+      </div>
     </div>
+
   );
 }
 
